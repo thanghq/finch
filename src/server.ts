@@ -43,7 +43,7 @@ export default class FinchServer {
     })
   }
 
-  public listen (port: number, callback?: Function): void {
+  public listen (port: number, callback?: (...args: any[]) => void): void {
     this.server.listen(port, callback)
   }
 
@@ -71,7 +71,7 @@ export default class FinchServer {
 
       const {port, pathname} = parse(browser.wsEndpoint())
       const target = `ws://127.0.0.1:${port}`
-      req.url = pathname
+      req.url = pathname || '';
       this.proxy.ws(req, socket, head, {target})
     })
 

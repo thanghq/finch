@@ -1,23 +1,26 @@
 import * as puppeteer from 'puppeteer'
 import Debug from '../utils/debug'
-import * as packageJson from 'puppeteer/package.json'
+// import * as packageJson from 'puppeteer/package.json'
 import {headless} from '../config'
 
-const browserFetcher = (puppeteer as any).createBrowserFetcher()
-const revision = packageJson.puppeteer.chromium_revision
-const {executablePath} = browserFetcher.revisionInfo(revision)
+const executablePath = ((puppeteer as unknown) as puppeteer.PuppeteerNode).executablePath();
+// const browserFetcher = (puppeteer as any).createBrowserFetcher()
+// const revision = packageJson.puppeteer.chromium_revision
+// const {executablePath} = browserFetcher.revisionInfo(revision)
 
 const debug = Debug('browser-pool:utils')
 debug('got executablePath: %s', executablePath)
 
 export async function launchBrowser (retries: number = 1): Promise<puppeteer.Browser> {
   const launchArgs = {
-    headless,
+    headless: "new",
     executablePath,
     args: ['--disable-dev-shm-usage', '--no-sandbox', '--disable-setuid-sandbox']
   }
 
   try {
+
+    console.log('executablePath', executablePath);
     return await puppeteer.launch(launchArgs)
   } catch (err) {
     console.error(err)

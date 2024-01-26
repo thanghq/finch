@@ -16,7 +16,7 @@ A Dockerfile is provided for setting up Finch easier:
 
 ```shell
 docker build -t finch .
-docker run -p 9001:9001 finch
+docker run -p 9001:9001 --network="host" finch
 ```
 
 A Puppeteer cluster will be listening to the port 9001 for you to use as native Puppeteer:

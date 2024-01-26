@@ -19,7 +19,6 @@ RUN apt-get install -y \
   fonts-thai-tlwg \
   fontconfig \
   libappindicator3-1 \
-  pdftk \
   unzip \
   locales \
   gconf-service \
@@ -61,7 +60,8 @@ RUN apt-get install -y \
   lsb-release \
   xdg-utils \
   wget \
-  curl
+  curl \
+  libgbm1
 
 
 # It's a good idea to use dumb-init to help prevent zombie chrome processes.
@@ -71,12 +71,14 @@ RUN chmod +x /usr/local/bin/dumb-init
 # Cleanup
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-RUN curl -sL https://deb.nodesource.com/setup_10.x | bash - && apt-get install -y nodejs
+RUN curl -sL https://deb.nodesource.com/setup_16.x | bash - && apt-get install -y nodejs
+RUN node -v
 
 COPY package*.json ./
 RUN npm install
 COPY . ./
-RUN ./node_modules/.bin/tsc
+RUN npx puppeteer browsers install chrome
+RUN npm run build
 
 RUN npm prune --production &&\
   rm -rf src

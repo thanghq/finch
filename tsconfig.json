@@ -16,7 +16,7 @@
     "outDir": "dist",
     "lib": [
       "dom",
-      "es7"
+      "es2018"
     ],
     "target": "es2017"
   },
